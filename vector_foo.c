@@ -9,7 +9,7 @@ void vector_init(vector* this){
 }
 
 void vector_init_size(vector* this, size_t n){
-    this->data = malloc(n);
+    this->data = malloc(n * sizeof(int));
     this->size = n;
     this->capacity = n;
 }
@@ -17,8 +17,8 @@ void vector_init_size(vector* this, size_t n){
 void vector_init_fill(vector* this, size_t n, int value){
 	this->size = n;
 	this->capacity = n;
-	this->data = malloc(n);
-	for(int i = 0; i < (n / sizeof(int)); i++) this->data[i] = value;
+	this->data = malloc(n * sizeof(int));
+	for(int i = 0; i < n; i++) this->data[i] = value;
 }
 
 void vector_destroy(vector* this){
@@ -32,7 +32,7 @@ void vector_copy(vector* this, const vector* other){
 	this->size = other->size;
 	this->capacity = other->capacity;
 	this->data = malloc(this->size);
-	for(int i =  0; i < (this->size)/sizeof(int); i++) this->data[i] = other->data[i];
+	for(int i =  0; i < this->size; i++) this->data[i] = other->data[i];
 }
 
 //2. Assignment Operators
@@ -119,13 +119,13 @@ void vector_insert(vector* v, size_t pos, int value){
 
 void vector_erase(vector* v, size_t pos){
 	if(pos >  v->size) return;
-	for(int i = pos; i < (v->size/sizeof(int) - 1); i++) v->data[i] = v->data[i + 1];
+	for(int i = pos; i < (v->size - 1); i++) v->data[i] = v->data[i + 1];
 	(v->size)--;
 }
 
 void vector_resize(vector* v, size_t count){
-	if(count > v->capacity) vector_reserve(v, count * sizeof(int));
-	v->size = count * sizeof(int);
+	if(count > v->capacity) vector_reserve(v, count);
+	v->size = count;
 }
 
 void swap(vector* v1, vector* v2){
